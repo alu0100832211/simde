@@ -1,4 +1,5 @@
 16
+// Recorre los valores y los suma en un registro indexado por el numero de sensor
 // R1 : Id Sensor
 // R2 : Iterador general
 // R3 : Numero de Elementos
