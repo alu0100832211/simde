@@ -1,0 +1,12 @@
+Pseudocodigo de la busqueda
+
+busqueda(i,n, mem, s):
+  p = ((n-i+1)/2)*2+2*i
+  si n == i || mem[p] == s
+    return
+  si s < mem[p]
+    n = p/2 - 1
+  si s > mem[p]
+    i = p/2 + 1
+
+Pseudocodigo sensores
