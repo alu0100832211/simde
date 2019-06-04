@@ -18,7 +18,6 @@ CONTAR:
 	ADDI R29 R29 #-1
 
 // R28: Posición del sensor a buscar/guardar
-
 MAIN:
 	BEQ R34 R32 FINISH
 	// while carga de memoria != -1
@@ -63,13 +62,14 @@ BUSQUEDA:
 	BEQ R34 R37 BUSQUEDAFINISH
 
 	// Condicionales entre v y el elemento en p
-	BGT R34 R37 IFGREATER
+	BGT R34 R37 IFGREATER //si s > v[p]
 
-	SRLV R30 R36 R33
+  //si s < v[p]
+	SRLV R30 R36 R33  //n = p/2 - 1
 	ADDI R30 R30 #-1
 	BEQ R0 R0 BUSQUEDA
 
-IFGREATER:
+IFGREATER: //si s > v[p]
 	SRLV R35 R36 R33
 	ADDI R35 R35 #1
 	BEQ R0 R0 BUSQUEDA

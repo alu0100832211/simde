@@ -2,9 +2,11 @@
 	ADDI R32 R0 #-1
 	ADDI R33 R0 #1 
 
-// CONTAR 
-CONTAR:
-	LW R31 0(R30)
+//Lee un valor, suma 2 a R30 y lee la posicion 0(R30) con el siguiente valor
+// Cuando encuentra el -1 no carga el siguiente valor, resta 2 a R30 y lo divide por 2 (desplazando 1 bit a laderecha)
+// Esto se hace una única vez
+CONTAR: 
+	LW R31 0(R30) //Cargar primer valor
 	ADDI R30 R30 #2
 	BNE R31 R32 CONTAR
 
@@ -19,7 +21,6 @@ CONTAR:
 // R36: p (posición del elemento)
 // R37: elemento
 // R38: 2i
-
 	LW R34 40(R0) // Cogemos sensor a buscar (en este caso, 4)
 
 BUSQUEDA:
@@ -33,16 +34,16 @@ BUSQUEDA:
 	ADD R36 R36 R38
 
 	// Terminar si i == n
-	BEQ R30 R35 FINISH
+	BEQ R30 R35 FINISHBUSQUEDA
 
 	// Cogemos elemento[p]
 	LW R37 0(R36)
 
 	// Terminar si v == elemento[p]
-	BEQ R34 R37 FINISH
+	BEQ R34 R37 FINISHBUSQUEDA
 
 	// Condicionales entre v y el elemento en p
-	BGT R34 R37 IFGREATER
+	BGT R34 R37 IFGREATER // si v > p
 
 	SRLV R30 R36 R33
 	ADDI R30 R30 #-1
@@ -53,5 +54,5 @@ IFGREATER:
 	ADDI R35 R35 #1
 	BEQ R0 R0 BUSQUEDA
 
-FINISH:
+FINISHBUSQUEDA:
 	LF F3 1(R36)
