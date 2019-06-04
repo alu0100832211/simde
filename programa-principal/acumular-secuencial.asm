@@ -1,4 +1,4 @@
-29
+30
 // Recorre los valores y los suma en un registro indexado por el numero de sensor
 // R1 : Id Sensor
 // R2 : Iterador general
@@ -37,9 +37,6 @@ LOOP: //Recorrer datos hasta leer -1
         BNE R3 R0 LOOPV //volver al bucle si n!=0
     SF F2 20(R1)
     BEQ R0 R0 LOOP
-FINAL:
-    ADDI R60 R0 #10
-
 // R22: valor id del recorrido cuando se busca el id
 // R23: iterador de la busqueda
 BUSQUEDASECUENCIAL://Buscar un valor en la tabla que empieza en 0
@@ -54,3 +51,6 @@ LOOPBUSQUEDA:
     ADDI R23 R23 #1 //siguiente elemento
 BNE R22, R21, LOOPBUSQUEDA
 BEQ R22, R21 BUSQUEDARETURN
+
+FINAL:
+    ADDI R60 R0 #10
