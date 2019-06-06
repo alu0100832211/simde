@@ -5,7 +5,7 @@
 //Lee un valor, suma 2 a R30 y lee la posicion 0(R30) con el siguiente valor
 // Cuando encuentra el -1 no carga el siguiente valor, resta 2 a R30 y lo divide por 2 (desplazando 1 bit a laderecha)
 // Esto se hace una única vez
-CONTAR: 
+CONTAR:  // se puede suponer que se tiene el nº de elementos
 	LW R31 0(R30) //Cargar primer valor
 	ADDI R30 R30 #2
 	BNE R31 R32 CONTAR

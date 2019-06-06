@@ -1,4 +1,4 @@
-50
+45
 // Recorre los valores y los suma en un registro indexado por el numero de sensor
 // R1 : Id Sensor
 // R2 : Iterador general
@@ -14,15 +14,16 @@
 // While R1 != -1
 	ADDI R32 R0 #-1
 	ADDI R33 R0 #1 
-CONTAR: //Contar número de sensores
-	LW R31 0(R29)
-	ADDI R29 R29 #2
-	BNE R31 R32 CONTAR
-
-	// GUARDAR EN R29 N ELEMENTOS
-	ADDI R29 R29 #-2
-	SRLV R29 R29 R33
-	ADDI R29 R29 #-1
+  ADDI R29 R0 #5
+//CONTAR: //Contar número de sensores
+//	LW R31 0(R29)
+//	ADDI R29 R29 #2
+//	BNE R31 R32 CONTAR
+//
+//	// GUARDAR EN R29 N ELEMENTOS
+//	ADDI R29 R29 #-2
+//	SRLV R29 R29 R33
+//	ADDI R29 R29 #-1
 
 ADDI R21 R0 #-1
 LOOP: //Recorrer datos hasta leer -1
