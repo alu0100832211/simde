@@ -1,4 +1,4 @@
-31
+30
 // Recorre los valores y los suma en un registro indexado por el numero de sensor
 // R1 : Id Sensor
 // R2 : Iterador general
@@ -27,7 +27,7 @@ LOOP: //Recorrer datos hasta leer -1
         LW R4 40(R2) //Leer variable aplicar factor
         ADDI R2 R2 #1 //siguiente iterador
         BEQ R0 R4 NOMULTIPLICAR  //si variable condicion falsa, no multiplicar
-        BNE R1 R5 BUSQUEDASECUENCIAL //Compara factor leido con R1 y coloca en F3 factor buscado
+        BEQ R0 R0 BUSQUEDASECUENCIAL //Compara factor leido con R1 y coloca en F3 factor buscado
         BUSQUEDARETURN: //llamada a busqueda
         ADD R0 R0 R0    //llamada a busqueda
         MULTF F1, F1, F3  //multiplicar el valor por el factor
@@ -40,7 +40,6 @@ LOOP: //Recorrer datos hasta leer -1
 // R22: valor id del recorrido cuando se busca el id
 // R23: iterador de la busqueda
 BUSQUEDASECUENCIAL://Buscar un valor en la tabla que empieza en 0
-  ADDI R5 R1 #0
   ADD R23 R0 R0 //Resetear contador
 LOOPBUSQUEDA:
   LW R22 0(R23) //id factor

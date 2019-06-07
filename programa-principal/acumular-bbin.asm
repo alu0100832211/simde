@@ -1,5 +1,4 @@
-45
-// Recorre los valores y los suma en un registro indexado por el numero de sensor
+48
 // R1 : Id Sensor
 // R2 : Iterador general
 // R3 : Numero de Elementos
@@ -12,13 +11,13 @@
 // F2 : Acumulador Sensor
 // F3 : factor multiplicador
 // While R1 != -1
+  ADDI R5 R0  #-1
 	ADDI R32 R0 #-1
 	ADDI R33 R0 #1 
   ADDI R29 R0 #5
 //CONTAR: //Contar número de sensores
 //	LW R31 0(R29)
-//	ADDI R29 R29 #2
-//	BNE R31 R32 CONTAR
+//	ADDI R29 R29 #2 //	BNE R31 R32 CONTAR
 //
 //	// GUARDAR EN R29 N ELEMENTOS
 //	ADDI R29 R29 #-2
@@ -39,9 +38,12 @@ LOOP: //Recorrer datos hasta leer -1
         LW R4 40(R2) //Leer variable aplicar factor
         ADDI R2 R2 #1 //siguiente iterador
         BEQ R0 R4 NOMULTIPLICAR  //si variable condicion falsa, no multiplicar
-        BEQ R0 R0 FBUSQUEDA //Compara factor leido con R1 y coloca en F3 factor buscado
+        //r1 = id del factor buscado
+        //r5 = id del factor cargado
+        //F3 = FACTOR CARGADO 
+        BNE R1 R5 FBUSQUEDA 
         BUSQUEDARET: //llamada a busqueda
-        ADD R0 R0 R0    //llamada a busqueda
+        SRLV R6 R6 R33 //PONER R6 a 0 para indicar que no se esta buscando 
         MULTF F1, F1, F3  //multiplicar el valor por el factor
         NOMULTIPLICAR:
         ADDF F2 F2 F1 //Acumular valor
@@ -54,6 +56,8 @@ LOOP: //Recorrer datos hasta leer -1
 // R1: id buscado
 FBUSQUEDA:
 	// Carga de registros
+  ADDI R6 R6 #1
+  ADDI R5 R1 #0 // caché
 	ADDI R35 R0 #0
 	ADDI R30 R29 #0
 

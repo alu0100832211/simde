@@ -1,5 +1,4 @@
-31
-// Recorre los valores y los suma en un registro indexado por el numero de sensor
+44
 // R1 : Id Sensor
 // R2 : Iterador general
 // R3 : Numero de Elementos
@@ -12,6 +11,17 @@
 // F2 : Acumulador Sensor
 // F3 : factor multiplicador
 // While R1 != -1
+	ADDI R32 R0 #-1
+	ADDI R33 R0 #1 
+  ADDI R29 R0 #5
+//CONTAR: //Contar número de sensores
+//	LW R31 0(R29)
+//	ADDI R29 R29 #2 //	BNE R31 R32 CONTAR
+//
+//	// GUARDAR EN R29 N ELEMENTOS
+//	ADDI R29 R29 #-2
+//	SRLV R29 R29 R33
+//	ADDI R29 R29 #-1
 
 ADDI R21 R0 #-1
 LOOP: //Recorrer datos hasta leer -1
@@ -27,9 +37,11 @@ LOOP: //Recorrer datos hasta leer -1
         LW R4 40(R2) //Leer variable aplicar factor
         ADDI R2 R2 #1 //siguiente iterador
         BEQ R0 R4 NOMULTIPLICAR  //si variable condicion falsa, no multiplicar
-        BNE R1 R5 BUSQUEDASECUENCIAL //Compara factor leido con R1 y coloca en F3 factor buscado
-        BUSQUEDARETURN: //llamada a busqueda
-        ADD R0 R0 R0    //llamada a busqueda
+        //r1 = id del factor buscado
+        //r5 = id del factor cargado
+        //F3 = FACTOR CARGADO 
+        BEQ R0 R0 FBUSQUEDA 
+        BUSQUEDARET: //llamada a busqueda
         MULTF F1, F1, F3  //multiplicar el valor por el factor
         NOMULTIPLICAR:
         ADDF F2 F2 F1 //Acumular valor
@@ -39,19 +51,47 @@ LOOP: //Recorrer datos hasta leer -1
     BEQ R0 R0 LOOP
 // R22: valor id del recorrido cuando se busca el id
 // R23: iterador de la busqueda
-BUSQUEDASECUENCIAL://Buscar un valor en la tabla que empieza en 0
-  ADDI R5 R1 #0
-  ADD R23 R0 R0 //Resetear contador
-LOOPBUSQUEDA:
-  LW R22 0(R23) //id factor
-  ADDI R23 R23 #1 //siguiente elemento
-  BNE R22, R1 NOBUSCAR //no cargar valor si id no es el buscado
-  LF F3 0(R23) //si es el id, carga factor
-  BEQ R0 R0 BUSQUEDARETURN //y salir de subrutina
-  NOBUSCAR:
-    ADDI R23 R23 #1 //siguiente elemento
-BNE R22, R21, LOOPBUSQUEDA
-BEQ R22, R21 BUSQUEDARETURN
+// R1: id buscado
+FBUSQUEDA:
+	// Carga de registros
+	ADDI R35 R0 #0
+	ADDI R30 R29 #0
+
+BUSQUEDA:
+	// p = (n - i + 1) / 2 * 2 + (2 * i)
+	SUB R36 R30 R35
+	ADDI R36 R36 #1
+	SRLV R36 R36 R33
+	SLLV R36 R36 R33
+
+	SLLV R38 R35 R33
+	ADD R36 R36 R38
+
+	// Terminar si i == n
+	BEQ R30 R35 BUSQUEDAFINISH
+
+	// Cogemos elemento[p]
+	LW R37 0(R36)
+
+	// Terminar si v == elemento[p]
+	BEQ R1 R37 BUSQUEDAFINISH
+	// Condicionales entre v y el elemento en p
+	BGT R1 R37 IFGREATER //si s > v[p]
+
+  //si s < v[p]
+	SRLV R30 R36 R33  //n = p/2 - 1
+	ADDI R30 R30 #-1
+	BEQ R0 R0 BUSQUEDA
+
+IFGREATER: //si s > v[p]
+	SRLV R35 R36 R33 //i = p/2 + 1
+	ADDI R35 R35 #1
+	BEQ R0 R0 BUSQUEDA
+
+BUSQUEDAFINISH:
+	LF F3 1(R36)
+	SF F3 100(R28)
+	BEQ R0 R0 BUSQUEDARET
 
 FINAL:
     ADDI R60 R0 #10
