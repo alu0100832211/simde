@@ -1,4 +1,4 @@
-31
+42
 // Recorre los valores y los suma en un registro indexado por el numero de sensor
 // R1 : Id Sensor
 // R2 : Iterador general
@@ -18,22 +18,39 @@ LOOP: //Recorrer datos hasta leer -1
     ADDF F2 F0 F0 //poner acumulador a 0
     LW R1 40(R2) //leer id
     BEQ R1 R21 FINAL //si R1 == -1 salir
-    ADDI R2 R2 #1 //siguiente elemento
-    LW R3 40(R2) //leer n
-    ADDI R2 R2 #1 //siguiente elemento
+    LW R3 41(R2) //leer n
+    ADDI R2 R2 #2 //siguiente elemento
+    BNE R1 R5 BUSQUEDASECUENCIAL //Compara factor leido con R1 y coloca en F3 factor buscado
     NLOOP: //para n..1
-        LF F1 40(R2) //Primer valor
-        ADDI R2 R2 #1 //siguiente iterador
-        LW R4 40(R2) //Leer variable aplicar factor
-        ADDI R2 R2 #1 //siguiente iterador
-        BEQ R0 R4 NOMULTIPLICAR  //si variable condicion falsa, no multiplicar
-        BNE R1 R5 BUSQUEDASECUENCIAL //Compara factor leido con R1 y coloca en F3 factor buscado
-        BUSQUEDARETURN: //llamada a busqueda
-        ADD R0 R0 R0    //llamada a busqueda
-        MULTF F1, F1, F3  //multiplicar el valor por el factor
-        NOMULTIPLICAR:
-        ADDF F2 F2 F1 //Acumular valor
-        ADD R3 R3 R21 //n--
+        //desenrollado 1
+        LF F10 40(R2) //Primer valor
+        LW R40 41(R2) //Leer variable aplicar factor
+        BEQ R0 R40 A  //si variable condicion falsa, no multiplicar
+        MULTF F10, F10, F3  //multiplicar el valor por el factor
+        A:
+        //desenrollado 2
+        LF F11 42(R2) //Primer valor
+        LW R41 43(R2) //Leer variable aplicar factor
+        BEQ R0 R41 B  //si variable condicion falsa, no multiplicar
+        MULTF F11, F11, F3  //multiplicar el valor por el factor
+        B:
+        //desenrollado 3
+        LF F12 44(R2) //Primer valor
+        LW R42 45(R2) //Leer variable aplicar factor
+        BEQ R0 R42 C  //si variable condicion falsa, no multiplicar
+        MULTF F12, F12, F3  //multiplicar el valor por el factor
+        C:
+        //desenrollado 4
+        LF F13 46(R2) //Primer valor
+        LW R43 47(R2) //Leer variable aplicar factor
+        BEQ R0 R43 D  //si variable condicion falsa, no multiplicar
+        MULTF F13, F13, F3  //multiplicar el valor por el factor
+        D:
+        ADDF F2 F10 F11 //Acumular valor
+        ADDF F4 F12 F13 //Acumular valor
+        ADDF F2 F2 F4   //Acumular valor
+        ADDI R3 R3 #-4
+        ADDI R2 R2 #8
         BNE R3 R0 NLOOP //volver al bucle si n!=0
     SF F2 20(R1)
     BEQ R0 R0 LOOP
@@ -47,11 +64,11 @@ LOOPBUSQUEDA:
   ADDI R23 R23 #1 //siguiente elemento
   BNE R22, R1 NOBUSCAR //no cargar valor si id no es el buscado
   LF F3 0(R23) //si es el id, carga factor
-  BEQ R0 R0 BUSQUEDARETURN //y salir de subrutina
+  BEQ R0 R0 NLOOP //y salir de subrutina
   NOBUSCAR:
     ADDI R23 R23 #1 //siguiente elemento
 BNE R22, R21, LOOPBUSQUEDA
-BEQ R22, R21 BUSQUEDARETURN
+BEQ R22, R21 NLOOP
 
 FINAL:
     ADDI R60 R0 #10
