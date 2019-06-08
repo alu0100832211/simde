@@ -29,21 +29,24 @@ LOOP: //Recorrer datos hasta leer -1
         //desenrollado 1
         LF F10 40(R2) //Primer valor
         LW R10 41(R2) //Leer variable aplicar factor
-        LF F11 42(R2) //Primer valor
-        LW R11 43(R2) //Leer variable aplicar factor
-        LF F12 44(R2) //Primer valor
-        LW R12 45(R2) //Leer variable aplicar factor
-        LF F13 46(R2) //Primer valor
-        LW R13 47(R2) //Leer variable aplicar factor
-        BEQ R0 R10 A //Multiplicaciones
+        BEQ R0 R10 A
         MULTF F10, F10, F3  //multiplicar el valor por el factor
         A:
+        //desenrollado 2
+        LF F11 42(R2) //Primer valor
+        LW R11 43(R2) //Leer variable aplicar factor
         BEQ R0 R11 B  //si variable condicion falsa, no multiplicar
         MULTF F11, F11, F3  //multiplicar el valor por el factor
         B:
+        //desenrollado 3
+        LF F12 44(R2) //Primer valor
+        LW R12 45(R2) //Leer variable aplicar factor
         BEQ R0 R12 C  //si variable condicion falsa, no multiplicar
         MULTF F12, F12, F3  //multiplicar el valor por el factor
         C:
+        //desenrollado 4
+        LF F13 46(R2) //Primer valor
+        LW R13 47(R2) //Leer variable aplicar factor
         BEQ R0 R13 D  //si variable condicion falsa, no multiplicar
         MULTF F13, F13, F3  //multiplicar el valor por el factor
         D:

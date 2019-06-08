@@ -1,0 +1,8 @@
+Los nombres de archivos describen el numero de unidades funcionales de la máquina:
+se - suma entera
+me - multiplicacion entera
+spf - suma punto flotante
+mpf - multiplicacion en punto flotante
+mem - memoria
+b - unidades de salto
+e - emisión
